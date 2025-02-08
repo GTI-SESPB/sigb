@@ -1,0 +1,21 @@
+html, body {
+  height: 100%;
+}
+
+main {
+  max-width: 300px;
+}
+
+main img {
+  width: 250px;
+}
+
+input[type=email] {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+input[type=password], input[type=text] {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

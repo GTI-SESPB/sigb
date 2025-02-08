@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main %}
+<div class="container-xl h-100">
+  <form method="GET" class="container-xl my-2">
+    <div class="row">
+      <div class="col-lg fw-semibold mt-2">
+        {{ object_list.count }} resultados
+      </div>
+      <div class="col-xl-1 mt-2 d-flex">
+        <!-- <div class="flex-grow-1 me-1"> -->
+        <!--   <input -->
+        <!--     type="text" -->
+        <!--     class="form-control" -->
+        <!--     name="pesquisa" -->
+        <!--     placeholder="..." -->
+        <!--     value="{{ request.GET.pesquisa }}" -->
+        <!--   > -->
+        <!-- </div> -->
+        <!-- <div class="me-1"> -->
+        <!--   <button type="submit" class="btn btn-success"> -->
+        <!--     <i class="bi bi-search"></i> -->
+        <!--   </button> -->
+        <!-- </div> -->
+        <div class="me-1">
+          <a href="{% url 'bolsista_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+          </a>
+        </div>
+        <!-- <div class="me-1"> -->
+        <!--   <a href="#" class="btn btn-secondary"> -->
+        <!--     <i class="bi bi-download"></i> -->
+        <!--   </a> -->
+        <!-- </div> -->
+      </div>
+    </div>
+  </form>
+  <div class="table-responsive-xl mt-2">
+    <table class="table align-middle">
+      <thead>
+        <th class="col-7">NOME</th> 
+        <th class="col-4">CPF</th>
+        <th class="col-1">Ações</th>
+      </thead> 
+      <tbody>
+        {% for bolsista in object_list %}
+        <tr>
+          <td class="col-7">{{ bolsista.nome }}</td>
+          <td class="col-4">{{ bolsista.cpf }}</td>
+          <td class="col-1">
+            <a href="{% url 'bolsista_update' pk=bolsista.id %}" class="btn btn-warning">
+              <i class="bi bi-pencil-fill" ></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>  
+  </div>
+  {% if paginator.num_pages > 1 %}
+  <nav class="mt-4" aria-label="...">
+    <ul class="pagination pagination-sm justify-content-center">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <button
+          type="button"
+          onclick="toPage('{{ page_obj.previous_page_number }}')"
+          class="page-link"
+        ><</button>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a href="#" class="page-link"><</a>
+      </li>
+      {% endif %}
+      {% for numero_pagina in page_range %}
+        {% if numero_pagina == paginator.ELLIPSIS %}
+          <li class="page-item disabled">
+            <a href="#" class="page-link">{{ numero_pagina }}</a>
+          </li>
+        {% else %}
+          <li class="page-item {% if numero_pagina == page_obj.number %}active{% endif %}">
+            <button
+              type="button"
+              onclick="toPage('{{ numero_pagina }}')"
+              class="page-link"
+            >
+              {{ numero_pagina }} {{ paginator.number }}
+            </button>
+          </li>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <button
+          type="button"
+          onclick="toPage('{{ page_obj.next_page_number }}')"
+          class="page-link"
+        >></button>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a href="#" class="page-link">></a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+</div>
+{% endblock main %}
