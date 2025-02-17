@@ -7,5 +7,6 @@ def create_superuser(sender, **kwargs):
         User.objects.create_superuser(
             email='admin@ses.local',
             nome='admin',
+            cpf='000.000.000-00',
             password='admin'
         )

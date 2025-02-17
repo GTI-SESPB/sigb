@@ -24,6 +24,7 @@ class UsuarioManager(BaseUserManager):
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
+    cpf = models.CharField('CPF', unique=True, max_length=255)
     email = models.EmailField(_("email address"), unique=True)
     nome = models.CharField(max_length=255)
     is_active = models.BooleanField(
@@ -43,7 +44,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['nome']
+    REQUIRED_FIELDS = ['nome', 'cpf']
 
     class Meta: # type: ignore
         verbose_name = "Usuário"

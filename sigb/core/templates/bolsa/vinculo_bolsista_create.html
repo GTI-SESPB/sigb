@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container-xl h-100 mt-4">
+  <h2>{% block title_form %}{% endblock title_form %}</h2>
+  <hr>
+  <form method="post", enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="{{ form.bolsista.id_for_label }}" class="form-label">
+      {{ form.bolsista.label }}
+    </label>
+    {{ form.bolsista }}
+    <div class="invalid-feedback">
+      {{ form.bolsista.errors.0 }}
+    </div>
+
+    <!-- Edital -->
+    <label for="{{ form.edital.id_for_label }}" class="form-label">
+      {{ form.edital.label }}
+    </label>
+    {{ form.edital }}
+    <div class="invalid-feedback">
+      {{ form.edital.errors.0 }}
+    </div>
+
+    <!-- Bolsa -->
+    <label for="{{ form.bolsa.id_for_label }}" class="form-label">
+      {{ form.bolsa.label }}
+    </label>
+    {{ form.bolsa }}
+    <div class="invalid-feedback">
+      {{ form.bolsa.errors.0 }}
+    </div>
+
+    <!-- Situação -->
+    <label for="{{ form.situacao.id_for_label }}" class="form-label">
+      {{ form.situacao.label }}
+    </label>
+    {{ form.situacao }}
+    <div class="invalid-feedback">
+      {{ form.situacao.errors.0 }}
+    </div>
+
+    <!-- Função -->
+    <label for="{{ form.funcao.id_for_label }}" class="form-label">
+      {{ form.funcao.label }}
+    </label>
+    {{ form.funcao }}
+    <div class="invalid-feedback">
+      {{ form.funcao.errors.0 }}
+    </div>
+
+    <!-- Data de Desligamento -->
+    <label for="{{ form.dt_desligamento.id_for_label }}" class="form-label">
+      {{ form.dt_desligamento.label }}
+    </label>
+    {{ form.dt_desligamento }}
+    <div class="invalid-feedback">
+      {{ form.dt_desligamento.errors.0 }}
+    </div>
+
+    <!-- Vigência da Outorga -->
+    <label for="{{ form.vigencia_outorga.id_for_label }}" class="form-label">
+      {{ form.vigencia_outorga.label }}
+    </label>
+    {{ form.vigencia_outorga }}
+    <div class="invalid-feedback">
+      {{ form.vigencia_outorga.errors.0 }}
+    </div>
+
+    <!-- Data de Outorga -->
+    <label for="{{ form.data_outorga.id_for_label }}" class="form-label">
+      {{ form.data_outorga.label }}
+    </label>
+    {{ form.data_outorga }}
+    <div class="invalid-feedback">
+      {{ form.data_outorga.errors.0 }}
+    </div>
+
+    <!-- Termo de Outorga -->
+    <label for="{{ form.termo_outorga.id_for_label }}" class="form-label">
+      {{ form.termo_outorga.label }}
+    </label>
+    {{ form.termo_outorga }}
+    <div class="invalid-feedback">
+      {{ form.termo_outorga.errors.0 }}
+    </div>
+
+    <div class="row justify-content-md-center my-5">
+      <div class="col col-xl-3 d-grid">
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock main %}

@@ -11,13 +11,8 @@
       </div>
       <div class="col-lg mt-2 d-flex justify-content-end">
         <div class="me-1">
-          <a href="{% url 'bolsista_create' %}" class="btn btn-primary">
+          <a href="{% url 'bolsa_create' %}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Adicionar
-          </a>
-        </div>
-        <div class="me-1">
-          <a href="{% url 'bolsista_download' %}" class="btn btn-secondary">
-            <i class="bi bi-download"></i> Baixar
           </a>
         </div>
       </div>
@@ -26,17 +21,19 @@
   <div class="table-responsive-xl mt-2">
     <table class="table align-middle">
       <thead>
-        <th class="col-7">NOME</th> 
-        <th class="col-4">CPF</th>
+        <th class="col-4">MODALIDADE</th> 
+        <th class="col-3">CARGA HORÁRIA</th>
+        <th class="col-4">VALOR</th>
         <th class="col-1">AÇÕES</th>
       </thead> 
       <tbody>
-        {% for bolsista in object_list %}
+        {% for bolsa in object_list %}
         <tr>
-          <td class="col-7">{{ bolsista.nome }}</td>
-          <td class="col-4">{{ bolsista.cpf }}</td>
+          <td class="col-7">{{ bolsa.modalidade }}</td>
+          <td class="col-4">{{ bolsa.carga_horaria }}</td>
+          <td class="col-4">{{ bolsa.valor }}</td>
           <td class="col-1">
-            <a href="{% url 'bolsista_update' pk=bolsista.id %}" class="btn btn-warning">
+            <a href="{% url 'bolsa_update' pk=bolsa.id %}" class="btn btn-warning">
               <i class="bi bi-pencil-fill" ></i>
             </a>
           </td>

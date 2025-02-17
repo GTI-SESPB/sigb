@@ -11,13 +11,8 @@
       </div>
       <div class="col-lg mt-2 d-flex justify-content-end">
         <div class="me-1">
-          <a href="{% url 'bolsista_create' %}" class="btn btn-primary">
+          <a href="{% url 'edital_create' %}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Adicionar
-          </a>
-        </div>
-        <div class="me-1">
-          <a href="{% url 'bolsista_download' %}" class="btn btn-secondary">
-            <i class="bi bi-download"></i> Baixar
           </a>
         </div>
       </div>
@@ -26,17 +21,19 @@
   <div class="table-responsive-xl mt-2">
     <table class="table align-middle">
       <thead>
-        <th class="col-7">NOME</th> 
-        <th class="col-4">CPF</th>
+        <th class="col-4">NÚMERO</th> 
+        <th class="col-3">VIGÊNCIA</th>
+        <th class="col-4">DESCRIÇÃO</th>
         <th class="col-1">AÇÕES</th>
       </thead> 
       <tbody>
-        {% for bolsista in object_list %}
+        {% for edital in object_list %}
         <tr>
-          <td class="col-7">{{ bolsista.nome }}</td>
-          <td class="col-4">{{ bolsista.cpf }}</td>
+          <td class="col-7">{{ edital.numero }}</td>
+          <td class="col-4">{{ edital.vigencia }}</td>
+          <td class="col-4">{{ edital.descricao }}</td>
           <td class="col-1">
-            <a href="{% url 'bolsista_update' pk=bolsista.id %}" class="btn btn-warning">
+            <a href="{% url 'edital_update' pk=edital.id %}" class="btn btn-warning">
               <i class="bi bi-pencil-fill" ></i>
             </a>
           </td>

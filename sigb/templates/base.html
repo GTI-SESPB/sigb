@@ -54,6 +54,12 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'bolsista_list' %}">Bolsistas</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'bolsa_list' %}">Bolsas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'edital_list' %}">Edital</a>
+            </li>
             {% if user.is_superuser %}
             <li class="nav-item">
               <a class="nav-link" href="/admin">Painel Administrativo</a>
