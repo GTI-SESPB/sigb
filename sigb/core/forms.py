@@ -3,7 +3,7 @@ from datetime import date
 from django import forms
 from django.forms import widgets
 
-from .models import Bolsista, Bolsa, Edital, RelacaoBolistaBolsa
+from .models import Bolsista, Bolsa, Edital, BolsistaBolsa
 
 
 SITUACAO_BOLSISTA = (
@@ -93,12 +93,7 @@ class EditalForm(forms.ModelForm):
         }
 
 
-class RelacaoBolsistaBolsaForm(forms.ModelForm):
-    bolsista = forms.ModelChoiceField(
-        label='Bolsista',
-        queryset=Bolsista.objects.all(),
-        widget=widgets.Select(attrs={'class': 'form-select'})
-    )
+class BolsistaBolsaForm(forms.ModelForm):
     edital = forms.ModelChoiceField(
         label='Edital',
         queryset=Edital.objects.all(),
@@ -115,10 +110,11 @@ class RelacaoBolsistaBolsaForm(forms.ModelForm):
         widget=widgets.Select(attrs={'class': 'form-select'})
     )
     class Meta:
-        model = RelacaoBolistaBolsa
+        model = BolsistaBolsa
         fields = '__all__'
 
         labels = {
+            'bolsista': 'Bolsista',
             'bolsa': 'Bolsa',
             'funcao': 'Função',
             'dt_desligamento': 'Data de desligamento',
@@ -128,6 +124,7 @@ class RelacaoBolsistaBolsaForm(forms.ModelForm):
         }
 
         widgets = {
+            'bolsista': widgets.TextInput(attrs={'class': 'form-control'}), 
             'bolsa': widgets.TextInput(attrs={'class': 'form-control'}),
             'funcao': widgets.TextInput(attrs={'class': 'form-control'}),
             'dt_desligamento': widgets.DateInput(attrs={

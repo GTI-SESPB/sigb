@@ -1,3 +1,9 @@
-{% extends 'bolsista/form.html' %}
+{% extends 'base.html' %}
 
-{% block title_form %}Adicionar Bolsista{% endblock title_form %}
+{% block main %}
+<div class="container-xl h-100 mt-4">
+  <h2>Adicionar Bolsista</h2>
+  <hr>
+  {% include 'bolsista/form.html' %}
+</div>
+{% endblock main %}

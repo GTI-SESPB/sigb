@@ -6,10 +6,10 @@
 <div class="container-xl h-100">
   <form method="GET" class="container-xl my-2">
     <div class="row">
-      <div class="col-lg fw-semibold mt-2">
+      <div class="col-lg ps-0 fw-semibold mt-3">
         {{ object_list.count }} resultados
       </div>
-      <div class="col-lg mt-2 d-flex justify-content-end">
+      <div class="col-lg mt-3 pe-0 d-flex justify-content-end">
         <div class="me-1">
           <a href="{% url 'edital_create' %}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Adicionar
@@ -18,7 +18,7 @@
       </div>
     </div>
   </form>
-  <div class="table-responsive-xl mt-2">
+  <div class="table-responsive-xl mt-3">
     <table class="table align-middle">
       <thead>
         <th class="col-4">NÚMERO</th> 

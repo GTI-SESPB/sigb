@@ -1,5 +1,8 @@
 from django.db import models
 
+from .bolsa import Bolsa
+from .edital import Edital
+
 
 class Bolsista(models.Model):
 
@@ -21,27 +24,7 @@ class Bolsista(models.Model):
         return f'{self.nome} - {self.cpf}'
 
 
-class Edital(models.Model):
-
-    numero = models.IntegerField()
-    vigencia = models.DateField()
-    descricao = models.CharField(max_length=255)
-
-    def __str__(self):
-        return str(self.numero)
-
-
-class Bolsa(models.Model):
-
-    modalidade = models.CharField(max_length=255)
-    carga_horaria = models.IntegerField()
-    valor = models.FloatField()
-
-    def __str__(self):
-        return str(self.modalidade)
-
-
-class RelacaoBolistaBolsa(models.Model):
+class BolsistaBolsa(models.Model):
 
     bolsista = models.ForeignKey(Bolsista, on_delete=models.CASCADE)
     edital = models.ForeignKey(Edital, on_delete=models.CASCADE)
@@ -49,7 +32,7 @@ class RelacaoBolistaBolsa(models.Model):
 
     funcao = models.CharField(max_length=255)
     situacao = models.CharField(max_length=255)
-    dt_desligamento = models.DateField()
+    dt_desligamento = models.DateField(blank=True, null=True)
 
     # Outorga
     vigencia_outorga = models.DateField()
