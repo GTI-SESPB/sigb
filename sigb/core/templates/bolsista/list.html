@@ -11,7 +11,7 @@
       </div>
       <div class="col-lg mt-3 pe-0 d-flex justify-content-end">
         <div class="me-1">
-          <a href="{% url 'bolsista_create' %}" class="btn btn-primary">
+          <a href="{% url 'bolsista_create' %}" class="btn btn-success">
             <i class="bi bi-plus-circle"></i> Adicionar
           </a>
         </div>
@@ -37,8 +37,8 @@
           <td class="col-4">{{ bolsista.cpf }}</td>
           <td class="col-1">
             <div class="d-flex flex-row-reverse">
-              <a href="{% url 'bolsista_update' pk=bolsista.id %}" class="btn btn-warning">
-                <i class="bi bi-pencil-fill" ></i>
+              <a href="{% url 'bolsista_detail' pk=bolsista.id %}" class="btn btn-primary">
+                <i class="bi bi-eye-fill" ></i>
               </a>
             </div>
           </td>

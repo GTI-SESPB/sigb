@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% load utils %}
+
+{% block main %}
+<div class="container-xl h-100 mt-4">
+  <h2>{{ object.nome }}</h2>
+  <hr>
+  <div class="row">
+    <div class="col-lg-3">
+      <p><b>CPF:</b> {{ object.cpf }}</p>
+    </div>
+    <div class="col-lg-3">
+      <p><b>Data de nascimento:</b> {{ object.dt_nascimento }}</p>
+    </div>
+    <div class="col-lg-3">
+      <p><b>E-mail:</b> {{ object.email }}</p>
+    </div>
+    <div class="col-lg-3">
+      <p><b>PIS/PASEP:</b> {{ object.pis_pasep }}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-3">
+      <p><b>Nome da mãe</b> {{ object.nome_mae }}</p> 
+    </div>
+    <div class="col-lg-3">
+      <p><b>Dados Bancários:</b> {{ object.conta_bancaria }}</p>
+    </div>
+  </div>
+
+  <h2 class="h5 mt-4">Endereço</h2>
+  <hr>
+  <div class="row">
+    <div class="col-lg-3">
+      <p><b>CEP:</b> {{ object.cep }}</p>
+    </div>
+    <div class="col-lg-6">
+      <p><b>Logradouro:</b> {{ object.logradouro }}</p>
+    </div>
+    <div class="col-lg-3">
+      <p><b>Número:</b> {{ object.numero }}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-3">
+      <p><b>Cidade:</b> {{ object.cidade }}</p>
+    </div>
+    <div class="col-lg-3">
+      <p><b>UF:</b> {{ object.uf }}</p>
+    </div>
+  </div>
+
+  <h2 class="h5 mt-4">Anexos</h2>
+  <hr>
+  <div class="row">
+    <div class="col-lg-6">
+      <p><b>Documentação:</b>
+        <a href="{{ bolsista.documentacao.url }}" download>
+          {{ bolsista.documentacao.name|get_filename }}
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <div class="row justify-content-md-center my-4">
+    <div class="col col-xl-3 d-grid">
+      <div class="d-grid">
+        <a href="{% url 'bolsista_update' pk=bolsista.id %}" class="btn btn-primary">Editar</a>
+      </div>
+    </div>
+  </div>
+  <hr>
+</div>
+{% endblock main %}

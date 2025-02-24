@@ -5,6 +5,13 @@ from ..forms import BolsaForm
 from ..models import Bolsa
 
 
+__all__ = [
+    'BolsaList',
+    'BolsaCreate',
+    'BolsaUpdate',
+]
+
+
 class BolsaList(LoginRequiredMixin, ListView):
     model = Bolsa
     paginate_by = 25

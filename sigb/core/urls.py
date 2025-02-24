@@ -1,24 +1,15 @@
 from django.urls import path
 
-from .views import (
-    home,
-    BolsistaCreate,
-    BolsistaList,
-    BolsistaUpdate,
-    BolsistaDownload,
-    BolsaList,
-    BolsaCreate,
-    BolsaUpdate,
-    EditalList,
-    EditalCreate,
-    EditalUpdate,
-    AdicionarBolsaBolsista,
-)
+from .views import home
+from .views.bolsista import *
+from .views.bolsa import *
+from .views.edital import *
 
 
 urlpatterns = [
     path('', home, name='home'),
     path('bolsista/list', BolsistaList.as_view(), name='bolsista_list'),
+    path('bolsista/detail/<pk>', BolsistaDetailView.as_view(), name='bolsista_detail'),
     path('bolsista/update/<pk>', BolsistaUpdate.as_view(), name='bolsista_update'),
     path('bolsista/create', BolsistaCreate.as_view(), name='bolsista_create'),
     path('bolsista/download', BolsistaDownload.as_view(), name='bolsista_download'),

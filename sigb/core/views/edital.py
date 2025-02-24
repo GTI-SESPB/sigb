@@ -5,6 +5,13 @@ from ..forms import EditalForm
 from ..models import Edital
 
 
+__all__ = [
+    'EditalList',
+    'EditalCreate',
+    'EditalUpdate',
+]
+
+
 class EditalList(LoginRequiredMixin, ListView):
     model = Edital
     paginate_by = 25

@@ -1,12 +1,20 @@
-from datetime import datetime as dt
-
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, ListView, UpdateView, View
-from django.shortcuts import render, redirect
+from django.views.generic import CreateView, ListView, UpdateView, DetailView, View
+from django.shortcuts import render, redirect, reverse
 
 from .utils import DownloadView
 from ..forms import BolsistaForm, BolsistaBolsaForm
-from ..models import Bolsista, BolsistaBolsa
+from ..models import Bolsista
+
+
+__all__ = [
+    'BolsistaList',
+    'BolsistaDetailView',
+    'BolsistaCreate',
+    'BolsistaUpdate',
+    'BolsistaDownload',
+    'AdicionarBolsaBolsista',
+]
 
 
 class BolsistaList(LoginRequiredMixin, ListView):
@@ -26,36 +34,32 @@ class BolsistaList(LoginRequiredMixin, ListView):
         return context
 
 
+class BolsistaDetailView(LoginRequiredMixin, DetailView):
+    model = Bolsista
+    template_name = 'bolsista/detail.html'
+
+
 class BolsistaCreate(LoginRequiredMixin, CreateView):
     model = Bolsista
     form_class = BolsistaForm
     template_name = 'bolsista/create.html'
-    success_url = '/bolsista/list'
+
+    def get_success_url(self):
+        return reverse('bolsista_detail', kwargs={ 'pk': self.object.id })
 
 
 class BolsistaUpdate(LoginRequiredMixin, UpdateView):
     model = Bolsista
     form_class = BolsistaForm
     template_name = 'bolsista/update.html'
-    success_url = '/bolsista/list'
 
     def get_object(self):
         obj = super().get_object()
         obj.dt_nascimento = obj.dt_nascimento.strftime('%Y-%m-%d')
         return obj
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        bolsista_pk = self.kwargs.get(self.pk_url_kwarg)
-        bolsista = Bolsista.objects.get(id=bolsista_pk)
-        bolsas = BolsistaBolsa.objects.filter(bolsista=bolsista)
-
-        context.update({
-            'bolsista': bolsista,
-            'bolsas': bolsas
-        })
-
-        return context
+    def get_success_url(self):
+        return reverse('bolsista_detail', kwargs={ 'pk': self.object.id })
 
 
 class BolsistaDownload(LoginRequiredMixin, DownloadView):
