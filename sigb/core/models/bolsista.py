@@ -18,7 +18,7 @@ class Bolsista(models.Model):
     numero = models.IntegerField()
     cidade = models.CharField(max_length=255)
     uf = models.CharField(max_length=2)
-    documentacao = models.FileField(upload_to='bolsista_documentacao')
+    documentacao = models.FileField(null=True, blank=True, upload_to='bolsista_documentacao')
 
     def __str__(self):
         return f'{self.nome} - {self.cpf}'

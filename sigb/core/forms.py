@@ -130,7 +130,8 @@ class BolsistaBolsaForm(forms.ModelForm):
             'dt_desligamento': widgets.DateInput(attrs={
                 'class': 'form-control',
                 'type': 'date',
-                'max': date.today().isoformat()
+                'max': date.today().isoformat(),
+                'disabled': '',
             }),
             'vigencia_outorga': widgets.DateInput(attrs={
                 'class': 'form-control',

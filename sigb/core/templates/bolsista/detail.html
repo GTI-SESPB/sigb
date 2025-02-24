@@ -28,9 +28,6 @@
       <p><b>Dados Bancários:</b> {{ object.conta_bancaria }}</p>
     </div>
   </div>
-
-  <h2 class="h5 mt-4">Endereço</h2>
-  <hr>
   <div class="row">
     <div class="col-lg-3">
       <p><b>CEP:</b> {{ object.cep }}</p>
@@ -50,9 +47,6 @@
       <p><b>UF:</b> {{ object.uf }}</p>
     </div>
   </div>
-
-  <h2 class="h5 mt-4">Anexos</h2>
-  <hr>
   <div class="row">
     <div class="col-lg-6">
       <p><b>Documentação:</b>
@@ -70,6 +64,40 @@
       </div>
     </div>
   </div>
-  <hr>
+
+  <h2 class="mt-5">Bolsas</h2>
+  <div class="row">
+    <div class="col-lg-3">
+      <a href="{% url 'vinculo_bolsista_create' bolsista_id=bolsista.id %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Adicionar Bolsa
+      </a>
+    </div>
+  </div>
+  <div class="table-responsive-xl mt-3">
+    <table class="table align-middle">
+      <thead>
+        <th>Bolsa</th> 
+        <th>Edital</th>
+        <th>Função</th>
+        <th>Situação</th>
+        <th>Ações</th>
+      </thead>
+      <tbody>
+        {% for bolsa in bolsas %}
+        <tr>
+          <td>{{ bolsa.bolsa }}</td>
+          <td>{{ bolsa.edital }}</td>
+          <td>{{ bolsa.funcao }}</td>
+          <td>{{ bolsa.situacao }}</td>
+          <td>
+            <a href="{% url 'vinculo_bolsista_update' bolsista_id=bolsista.id pk=bolsa.id %}" class="btn btn-warning">
+              <i class="bi bi-pencil-fill"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock main %}
