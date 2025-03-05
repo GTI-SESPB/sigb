@@ -21,18 +21,16 @@
   <div class="table-responsive-xl mt-3">
     <table class="table align-middle">
       <thead>
-        <th class="col-4">NÚMERO</th> 
-        <th class="col-3">VIGÊNCIA</th>
-        <th class="col-4">DESCRIÇÃO</th>
-        <th class="col-1">AÇÕES</th>
+        <th class="col">NÚMERO</th> 
+        <th class="col">VIGÊNCIA</th>
+        <th class="col">AÇÕES</th>
       </thead> 
       <tbody>
         {% for edital in object_list %}
         <tr>
-          <td class="col-7">{{ edital.numero }}</td>
-          <td class="col-4">{{ edital.vigencia }}</td>
-          <td class="col-4">{{ edital.descricao }}</td>
-          <td class="col-1">
+          <td class="col">{{ edital.numero }}</td>
+          <td class="col">{{ edital.vigencia }}</td>
+          <td class="col">
             <a href="{% url 'edital_update' pk=edital.id %}" class="btn btn-warning">
               <i class="bi bi-pencil-fill" ></i>
             </a>

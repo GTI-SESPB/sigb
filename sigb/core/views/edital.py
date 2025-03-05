@@ -1,8 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
-from django.views.generic import CreateView, ListView, UpdateView
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, ListView, UpdateView, View
 
-from ..forms.edital import EditalForm
+from ..forms.edital import EditalForm, EditalVincularBolsistaForm
+from ..models.bolsista import Bolsista
 from ..models.edital import Edital
 
 
@@ -10,6 +12,7 @@ __all__ = [
     'EditalList',
     'EditalCreate',
     'EditalUpdate',
+    'EditalVincularBolsistaView',
 ]
 
 
@@ -31,15 +34,29 @@ class EditalList(LoginRequiredMixin, ListView):
 class EditalCreate(LoginRequiredMixin, CreateView):
     model = Edital
     form_class = EditalForm
-
-    def get_success_url(self):
-        return reverse('edital_list')
+    success_url = reverse_lazy('edital_list')
 
 
 class EditalUpdate(LoginRequiredMixin, UpdateView):
     model = Edital
     form_class = EditalForm
+    success_url = reverse_lazy('edital_list')
     template_name_suffix = '_update_form'
 
-    def get_success_url(self):
-        return reverse('edital_list')
+
+class EditalVincularBolsistaView(LoginRequiredMixin, View):
+    template_name = 'core/edital_vincular_bolsista_form.html'
+
+    def get(self, request, **_):
+        form = EditalVincularBolsistaForm()
+        return render(request, self.template_name, { 'form': form })
+
+    def post(self, request, bolsista_id):
+        form = EditalVincularBolsistaForm(request.POST)
+
+        if form.is_valid():
+            bolsista = Bolsista.objects.get(pk=bolsista_id)
+            edital = form.cleaned_data['edital']
+            edital.bolsistas.add(bolsista)
+
+        return self.get(request)

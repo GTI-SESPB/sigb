@@ -3,7 +3,6 @@ from datetime import date
 from django import forms
 
 from ..models.bolsista import Bolsista
-from ..models.edital import Edital
 
 
 __all__ = [
@@ -55,10 +54,3 @@ class BolsistaForm(BolsistaAdminForm):
             'uf': forms.TextInput(attrs={'class': 'form-control'}),
             'documentacao': forms.FileInput(attrs={'class': 'form-control'}),
         }
-
-
-class BolsistaVincularEditalForm(forms.Form):
-    edital = forms.ModelChoiceField(
-        queryset=Edital.objects.all(),
-        widget=forms.Select(attrs={ 'class': 'form-select' })
-    )

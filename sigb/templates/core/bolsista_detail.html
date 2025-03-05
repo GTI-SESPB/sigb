@@ -75,6 +75,7 @@
         <th>VALOR</th>
         <th>EDITAL</th>
         <th>SITUAÇÃO</th>
+        <th>AÇÕES</th>
       </thead>
       <tbody>
         {% for bolsa in bolsista.bolsa_set.all %}
@@ -85,6 +86,11 @@
           <td>{{ bolsa.valor }}</td>
           <td>{{ bolsa.edital }}</td>
           <td>{{ bolsa.situacao }}</td>
+          <td>
+            <a href="{% url 'bolsa_update' pk=bolsa.id %}" class="btn btn-warning">
+              <i class="bi bi-pencil-fill" ></i>
+            </a>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -94,7 +100,7 @@
   <div class="row justify-content-md-center my-4">
     <div class="col col-xl-3 d-grid">
       <div class="d-grid">
-        <a href="" class="btn btn-primary">Adicionar Bolsa</a>
+        <a href="{% url 'bolsa_create' bolsista_id=bolsista.id %}" class="btn btn-primary">Adicionar Bolsa</a>
       </div>
     </div>
   </div>
@@ -122,7 +128,7 @@
   <div class="row justify-content-md-center my-4">
     <div class="col col-xl-3 d-grid">
       <div class="d-grid">
-        <a href="{% url 'bolsista_vincular_edital' bolsista_id=bolsista.id %}" class="btn btn-primary">Adicionar Edital</a>
+        <a href="{% url 'edital_vincular_bolsista' bolsista_id=bolsista.id %}" class="btn btn-primary">Vincular Edital</a>
       </div>
     </div>
   </div>

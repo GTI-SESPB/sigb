@@ -46,12 +46,12 @@ class BolsaUpdate(LoginRequiredMixin, View):
 
         return render(request, self.template_name, { 'form': form })
 
-    def post(self, request, bolsista_id):
-        form = BolsaForm(request.POST)
+    def post(self, request, pk):
+        bolsa = Bolsa.objects.get(pk=pk)
+        form = BolsaForm(request.POST, instance=bolsa)
 
         if form.is_valid():
-            form.instance.bolsista_id = bolsista_id
             form.save()
-            return redirect('bolsista_detail', pk=bolsista_id)
+            return redirect('bolsista_detail', pk=bolsa.bolsista_id)
 
         return render(request, self.template_name, { 'form': form })

@@ -1,15 +1,10 @@
-from io import BytesIO
-
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http.response import FileResponse
-from django.views.generic import CreateView, ListView, UpdateView, DetailView, View
-from django.shortcuts import render, redirect, reverse, get_object_or_404
-from reportlab.pdfgen import canvas
+from django.views.generic import CreateView, ListView, UpdateView, DetailView
+from django.urls import reverse
 
-# from sigb.core.models.edital import Edital
 
 from .utils import DownloadView
-from ..forms.bolsista import BolsistaForm, BolsistaVincularEditalForm
+from ..forms.bolsista import BolsistaForm
 from ..models.bolsista import Bolsista
 
 
@@ -19,7 +14,6 @@ __all__ = [
     'BolsistaCreate',
     'BolsistaUpdate',
     'BolsistaDownload',
-    'BolsistaVincularEditalView',
     # 'DeclaracaoVinculoView',
 ]
 
@@ -68,24 +62,6 @@ class BolsistaUpdate(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('bolsista_detail', kwargs={ 'pk': self.object.id })
-
-
-class BolsistaVincularEditalView(LoginRequiredMixin, View):
-    template_name = 'core/bolsista_vincular_edital_form.html'
-
-    def get(self, request, **_):
-        form = BolsistaVincularEditalForm()
-        return render(request, self.template_name, { 'form': form })
-
-    def post(self, request, bolsista_id):
-        form = BolsistaVincularEditalForm(request.POST)
-
-        if form.is_valid():
-            bolsista = Bolsista.objects.get(pk=bolsista_id)
-            edital = form.cleaned_data['edital']
-
-        return self.get(request)
-
 
 
 class BolsistaDownload(LoginRequiredMixin, DownloadView):
