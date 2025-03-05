@@ -1,10 +1,16 @@
+from io import BytesIO
+
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http.response import FileResponse
 from django.views.generic import CreateView, ListView, UpdateView, DetailView, View
 from django.shortcuts import render, redirect, reverse, get_object_or_404
+from reportlab.pdfgen import canvas
+
+# from sigb.core.models.edital import Edital
 
 from .utils import DownloadView
-from ..forms import BolsistaForm, BolsistaBolsaForm
-from ..models import Bolsista, BolsistaBolsa
+from ..forms.bolsista import BolsistaForm, BolsistaVincularEditalForm
+from ..models.bolsista import Bolsista
 
 
 __all__ = [
@@ -13,16 +19,14 @@ __all__ = [
     'BolsistaCreate',
     'BolsistaUpdate',
     'BolsistaDownload',
-    'AdicionarBolsaBolsista',
-    'AtualizarBolsaBolsista',
+    'BolsistaVincularEditalView',
+    # 'DeclaracaoVinculoView',
 ]
 
 
 class BolsistaList(LoginRequiredMixin, ListView):
     model = Bolsista
     paginate_by = 25
-    template_name = 'bolsista/list.html'
-    context_object_name = 'bolsistas'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -37,12 +41,9 @@ class BolsistaList(LoginRequiredMixin, ListView):
 
 class BolsistaDetailView(LoginRequiredMixin, DetailView):
     model = Bolsista
-    template_name = 'bolsista/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        bolsas = BolsistaBolsa.objects.filter(bolsista=self.object.id)
-        context.update({ 'bolsas': bolsas })
 
         return context
 
@@ -50,7 +51,6 @@ class BolsistaDetailView(LoginRequiredMixin, DetailView):
 class BolsistaCreate(LoginRequiredMixin, CreateView):
     model = Bolsista
     form_class = BolsistaForm
-    template_name = 'bolsista/create.html'
 
     def get_success_url(self):
         return reverse('bolsista_detail', kwargs={ 'pk': self.object.id })
@@ -59,7 +59,7 @@ class BolsistaCreate(LoginRequiredMixin, CreateView):
 class BolsistaUpdate(LoginRequiredMixin, UpdateView):
     model = Bolsista
     form_class = BolsistaForm
-    template_name = 'bolsista/update.html'
+    template_name_suffix = '_update_form'
 
     def get_object(self):
         obj = super().get_object()
@@ -70,59 +70,49 @@ class BolsistaUpdate(LoginRequiredMixin, UpdateView):
         return reverse('bolsista_detail', kwargs={ 'pk': self.object.id })
 
 
+class BolsistaVincularEditalView(LoginRequiredMixin, View):
+    template_name = 'core/bolsista_vincular_edital_form.html'
+
+    def get(self, request, **_):
+        form = BolsistaVincularEditalForm()
+        return render(request, self.template_name, { 'form': form })
+
+    def post(self, request, bolsista_id):
+        form = BolsistaVincularEditalForm(request.POST)
+
+        if form.is_valid():
+            bolsista = Bolsista.objects.get(pk=bolsista_id)
+            edital = form.cleaned_data['edital']
+
+        return self.get(request)
+
+
+
 class BolsistaDownload(LoginRequiredMixin, DownloadView):
     model = Bolsista
 
 
-class AdicionarBolsaBolsista(LoginRequiredMixin, View):
-    template_name = 'bolsista/adicionar_bolsa/form.html'
-
-    def get(self, request, bolsista_id, **kwargs):
-        bolsista = get_object_or_404(Bolsista, pk=int(bolsista_id))
-        return render(request, self.template_name, {
-            'form': kwargs.get('form', BolsistaBolsaForm), 'bolsista': bolsista 
-        })
-
-    def post(self, request, bolsista_id):
-        form = BolsistaBolsaForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-            return redirect('bolsista_detail', pk=bolsista_id)
-
-        return self.get(request, bolsista_id, form=form)
-
-
-class AtualizarBolsaBolsista(LoginRequiredMixin, View):
-    template_name = 'bolsista/adicionar_bolsa/form.html'
-
-    def get(self, request, bolsista_id, pk, **kwargs):
-        vinculo = BolsistaBolsa.objects.get(id=int(pk))
-        initial = {
-            'vigencia_outorga': vinculo.vigencia_outorga.strftime('%Y-%m-%d'),
-            'data_outorga': vinculo.data_outorga.strftime('%Y-%m-%d'),
-        }
-        if vinculo.dt_desligamento:
-            initial['dt_desligamento'] = vinculo.dt_desligamento.strftime('%Y-%m-%d'),
-
-        bolsista = get_object_or_404(Bolsista, pk=int(bolsista_id))
-        if form := kwargs.get('form') is None:
-            form = BolsistaBolsaForm(
-                initial=initial,
-                instance=vinculo
-            )
-
-        return render(
-            request,
-            self.template_name,
-            { 'form': form, 'bolsista': bolsista, 'vinculo': vinculo }
-        )
-
-    def post(self, request, bolsista_id, pk):
-        vinculo = BolsistaBolsa.objects.get(id=int(pk))
-        form = BolsistaBolsaForm(request.POST, request.FILES, instance=vinculo)
-        if form.is_valid():
-            form.save()
-            return redirect('bolsista_detail', pk=bolsista_id)
-
-        return self.get(request, bolsista_id, pk, form=form)
+# class DeclaracaoVinculoView(LoginRequiredMixin, View):
+#     def get(self, _, vinculo_id):
+#         vinculo = BolsistaBolsa.objects.get(id=int(vinculo_id))
+#
+#         buffer = BytesIO()
+#         pdf = canvas.Canvas(buffer)
+#         pdf.drawString(250, 250, 'DECLARAÇÃO')
+#         pdf.drawString(100, 750, '''
+#         Declaro para todos devidos fins, que {nome}, inscrito no CPF n° {cpf},
+#         é bolsista do Edital {edital} e exerce a atividade de {{atividade}},
+#         vinculado ao Projeto {{projeto}}, desenvolvido pela Escola de Saúde Pública
+#         da Paraíba - ESP/PB, entre {data_outorga} até o presente momento
+#         '''.format(
+#             nome=vinculo.bolsista.nome,
+#             cpf=vinculo.bolsista.cpf,
+#             edital=vinculo.edital,
+#             data_outorga=vinculo.data_outorga
+#         ))
+#
+#         pdf.showPage()
+#         pdf.save()
+#
+#         buffer.seek(0)
+#         return FileResponse(buffer, as_attachment=True, filename='declaracao.pdf')

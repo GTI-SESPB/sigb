@@ -1,42 +1,57 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, ListView, UpdateView
+from django.shortcuts import redirect, render
+from django.views import View
+from django.views.generic import CreateView, UpdateView
 
-from ..forms import BolsaForm
-from ..models import Bolsa
+from ..forms.bolsa import BolsaForm
+from ..models.bolsa import Bolsa
+from ..models.bolsista import Bolsista
 
 
 __all__ = [
-    'BolsaList',
     'BolsaCreate',
     'BolsaUpdate',
 ]
 
 
-class BolsaList(LoginRequiredMixin, ListView):
-    model = Bolsa
-    paginate_by = 25
-    template_name = 'bolsa/list.html'
+class BolsaCreate(LoginRequiredMixin, View):
+    template_name =  'core/bolsa_form.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        page = self.request.GET.get(self.page_kwarg) or 1
-        page_range = context['paginator'].get_elided_page_range(
-            number=page, on_each_side=2, on_ends=1
-        )
-        context.update({ 'page_range': page_range })
+    def get(self, request, bolsista_id):
+        form = BolsaForm()
+        bolsista = Bolsista.objects.get(pk=bolsista_id)
+        form.fields['edital'].queryset = bolsista.edital_set.all()
 
-        return context
+        return render(request, self.template_name, { 'form': form })
 
+    def post(self, request, bolsista_id):
+        form = BolsaForm(request.POST)
 
-class BolsaCreate(LoginRequiredMixin, CreateView):
-    model = Bolsa
-    form_class = BolsaForm
-    template_name = 'bolsa/create.html'
-    success_url = '/bolsista/list'
+        if form.is_valid():
+            form.instance.bolsista_id = bolsista_id
+            form.save()
+            return redirect('bolsista_detail', pk=bolsista_id)
+
+        return render(request, self.template_name, { 'form': form })
 
 
-class BolsaUpdate(LoginRequiredMixin, UpdateView):
-    model = Bolsa
-    form_class = BolsaForm
-    template_name = 'bolsa/update.html'
-    success_url = '/bolsa/list'
+class BolsaUpdate(LoginRequiredMixin, View):
+    template_name =  'core/bolsa_form.html'
+
+    def get(self, request, pk):
+        bolsa = Bolsa.objects.get(pk=pk)
+        form = BolsaForm(instance=bolsa)
+        bolsista = Bolsista.objects.get(pk=bolsa.bolsista_id)
+        form.fields['edital'].queryset = bolsista.edital_set.all()
+
+        return render(request, self.template_name, { 'form': form })
+
+    def post(self, request, bolsista_id):
+        form = BolsaForm(request.POST)
+
+        if form.is_valid():
+            form.instance.bolsista_id = bolsista_id
+            form.save()
+            return redirect('bolsista_detail', pk=bolsista_id)
+
+        return render(request, self.template_name, { 'form': form })

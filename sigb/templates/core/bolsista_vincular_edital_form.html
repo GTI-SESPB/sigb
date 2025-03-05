@@ -2,8 +2,8 @@
 
 {% block main %}
 <div class="container-xl h-100 mt-4">
-  <h2>Atualizar Bolsista</h2>
+  <h1>{% block form_title %}Vincular Edital{% endblock form_title %}</h1>
   <hr>
-  {% include 'bolsista/form.html' %}
+  {% include 'form.html' %} 
 </div>
 {% endblock main %}

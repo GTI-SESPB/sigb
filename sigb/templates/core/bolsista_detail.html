@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% load utils %}
+
+{% block main %}
+<div class="container-xl h-100 mt-4">
+  <h1>{{ bolsista.nome }}</h1>
+  <hr>
+  <div class="row">
+    <div class="col-lg-4">
+      <p><b>CPF:</b> {{ bolsista.cpf }}</p>
+    </div>
+    <div class="col-lg-4">
+      <p><b>Data de nascimento:</b> {{ bolsista.dt_nascimento }}</p>
+    </div>
+    <div class="col-lg-4">
+      <p><b>E-mail:</b> {{ bolsista.email }}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4">
+      <p><b>PIS/PASEP:</b> {{ bolsista.pis_pasep }}</p>
+    </div>
+    <div class="col-lg-4">
+      <p><b>Nome da mãe</b> {{ bolsista.nome_mae }}</p> 
+    </div>
+    <div class="col-lg-4">
+      <p><b>Dados Bancários:</b> {{ bolsista.conta_bancaria }}</p>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-lg-4">
+      <p><b>CEP:</b> {{ bolsista.cep }}</p>
+    </div>
+    <div class="col-lg-8">
+      <p><b>Logradouro:</b> {{ bolsista.logradouro }}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4">
+      <p><b>Número:</b> {{ bolsista.numero }}</p>
+    </div>
+    <div class="col-lg-4">
+      <p><b>Cidade:</b> {{ bolsista.cidade }}</p>
+    </div>
+    <div class="col-lg-4">
+      <p><b>UF:</b> {{ bolsista.uf }}</p>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-lg-4">
+      <p><b>Documentação:</b>
+        <a href="{{ bolsista.documentacao.url }}" download>
+          {{ bolsista.documentacao.name|get_filename }}
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <div class="row justify-content-md-center my-4">
+    <div class="col col-xl-3 d-grid">
+      <div class="d-grid">
+        <a href="{% url 'bolsista_update' pk=bolsista.id %}" class="btn btn-primary">Editar</a>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="h3 mt-5">Bolsas</h2>
+  <div class="table-responsive mt-4">
+    <table class="table align-middle">
+      <thead>
+        <th>MODALIDADE</th> 
+        <th>FUNÇÃO</th>
+        <th>CARGA HORÁRIRA</th>
+        <th>VALOR</th>
+        <th>EDITAL</th>
+        <th>SITUAÇÃO</th>
+      </thead>
+      <tbody>
+        {% for bolsa in bolsista.bolsa_set.all %}
+        <tr>
+          <td>{{ bolsa.modalidade }}</td>
+          <td>{{ bolsa.funcao }}</td>
+          <td>{{ bolsa.carga_horaria }}</td>
+          <td>{{ bolsa.valor }}</td>
+          <td>{{ bolsa.edital }}</td>
+          <td>{{ bolsa.situacao }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row justify-content-md-center my-4">
+    <div class="col col-xl-3 d-grid">
+      <div class="d-grid">
+        <a href="" class="btn btn-primary">Adicionar Bolsa</a>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="h3 mt-5">Editais</h2>
+  <div class="table-responsive mt-4">
+    <table class="table align-middle">
+      <thead>
+        <th>PROJETO</th> 
+        <th>NUMERO</th>
+        <th>NÚCLEO RESPONSÁVEL</th>
+      </thead>
+      <tbody>
+        {% for edital in bolsista.edital_set.all %}
+        <tr>
+          <td>{{ edital.projeto }}</td>
+          <td>{{ edital.numero }}</td>
+          <td>{{ edital.nucleo_responsavel }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row justify-content-md-center my-4">
+    <div class="col col-xl-3 d-grid">
+      <div class="d-grid">
+        <a href="{% url 'bolsista_vincular_edital' bolsista_id=bolsista.id %}" class="btn btn-primary">Adicionar Edital</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock main %}

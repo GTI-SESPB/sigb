@@ -25,6 +25,7 @@ services:
     build:
       context: .
       dockerfile: docker/dev/Dockerfile
+    restart: always
     environment:
       DJANGO__SECRET_KEY: ${DJANGO__SECRET_KEY}
       DJANGO__DEBUG: ${DJANGO__DEBUG:-1}

@@ -1,11 +1,12 @@
 from django.db import models
 
-from .bolsa import Bolsa
-from .edital import Edital
+
+__all__ = [
+    'Bolsista',
+]
 
 
 class Bolsista(models.Model):
-
     nome = models.CharField(max_length=255)
     cpf = models.CharField(max_length=11, unique=True)
     dt_nascimento = models.DateField()
@@ -20,21 +21,8 @@ class Bolsista(models.Model):
     uf = models.CharField(max_length=2)
     documentacao = models.FileField(null=True, blank=True, upload_to='bolsista_documentacao')
 
+    class Meta:
+        ordering = ['nome', 'cpf']
+
     def __str__(self):
-        return f'{self.nome} - {self.cpf}'
-
-
-class BolsistaBolsa(models.Model):
-
-    bolsista = models.ForeignKey(Bolsista, on_delete=models.CASCADE)
-    edital = models.ForeignKey(Edital, on_delete=models.CASCADE)
-    bolsa = models.ForeignKey(Bolsa, null=True, blank=True, on_delete=models.CASCADE)
-
-    funcao = models.CharField(max_length=255)
-    situacao = models.CharField(max_length=255)
-    dt_desligamento = models.DateField(blank=True, null=True)
-
-    # Outorga
-    vigencia_outorga = models.DateField()
-    data_outorga = models.DateField()
-    termo_outorga = models.FileField(null=True, blank=True, upload_to='termo_outorga')
+        return self.cpf
