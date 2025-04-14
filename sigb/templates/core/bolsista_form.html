@@ -15,6 +15,21 @@ function mascaraCPF(e) {
   }
 }
 
+async function getMunicipios(uf) {
+  let municipioSelect = document.querySelector('#id_municipio');
+  municipioSelect.innerHTML = '';
+  await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`)
+    .then(response => response.json())
+    .then(response => {
+      for (let municipio of response) {
+        let opt = document.createElement('option');
+        opt.value = municipio.nome;
+        opt.innerHTML = municipio.nome;
+        municipioSelect.appendChild(opt);
+      }
+    })
+}
+
 async function getEndereco(cep) {
   const input_logradouro = document.getElementsByName('logradouro')[0];
   const input_municipio = document.getElementsByName('municipio')[0];

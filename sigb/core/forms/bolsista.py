@@ -4,6 +4,7 @@ from django import forms
 
 from ..models.bolsista import Bolsista
 from ..validators import cpf_validator
+from ..utils import apenas_digitos
 
 
 __all__ = [
@@ -50,6 +51,15 @@ class BolsistaAdminForm(forms.ModelForm):
         max_length=11,
         validators=[cpf_validator]
     )
+    cep = forms.CharField(
+        label='CEP',
+        required=True,
+        max_length=8,
+    )
+    municipio = forms.CharField(
+        label='Município',
+        required=True,
+    )
     uf = forms.ChoiceField(
         label='UF',
         required=True,
@@ -68,10 +78,10 @@ class BolsistaAdminForm(forms.ModelForm):
             'pis_pasep': 'PIS/PASEP',
             'conta_bancaria': 'Conta Bancária',
             'cep': 'CEP',
-            'logradouro': 'Logradouro',
-            'numero': 'Número',
             'municipio': 'Cidade',
             'uf': 'UF',
+            'logradouro': 'Logradouro',
+            'numero': 'Número',
             'documentacao': 'Documentação',
         }
 
@@ -80,12 +90,26 @@ class BolsistaForm(BolsistaAdminForm):
     cpf = forms.CharField(
         label='CPF',
         required=True,
-        max_length=11,
+        max_length=14,
         validators=[cpf_validator],
-        widget = forms.TextInput(attrs={
+        widget=forms.TextInput(attrs={
             'class': 'form-control',
             'onkeyup': 'mascaraCPF(event)'
         })
+    )
+    cep = forms.CharField(
+        label='CEP',
+        required=True,
+        max_length=9,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'onkeyup': 'mascaraCEP(event)'
+        })
+    )
+    municipio = forms.CharField(
+        label='Município',
+        required=True,
+        widget=forms.Select(attrs={ 'class': 'form-select' })
     )
     uf = forms.ChoiceField(
         label='UF',
@@ -106,9 +130,14 @@ class BolsistaForm(BolsistaAdminForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'pis_pasep': forms.TextInput(attrs={'class': 'form-control'}),
             'conta_bancaria': forms.TextInput(attrs={'class': 'form-control'}),
-            'cep': forms.TextInput(attrs={'class': 'form-control'}),
             'logradouro': forms.TextInput(attrs={'class': 'form-control'}),
             'numero': forms.NumberInput(attrs={'class': 'form-control'}),
             'cidade': forms.TextInput(attrs={'class': 'form-control'}),
             'documentacao': forms.FileInput(attrs={'class': 'form-control'}),
         }
+
+    def clean_cep(self):
+        return apenas_digitos(self.cleaned_data['cep'])
+
+    def clean_cpf(self):
+        return apenas_digitos(self.cleaned_data['cpf'])

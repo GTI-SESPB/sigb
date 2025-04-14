@@ -15,10 +15,10 @@ class Bolsista(models.Model):
     pis_pasep = models.CharField()
     conta_bancaria = models.CharField(max_length=255)
     cep = models.CharField(max_length=8)
+    municipio = models.CharField(max_length=255)
+    uf = models.CharField(max_length=2)
     logradouro = models.CharField(max_length=255)
     numero = models.IntegerField()
-    uf = models.CharField(max_length=2)
-    municipio = models.CharField(max_length=255)
     documentacao = models.FileField(null=True, blank=True, upload_to='bolsista_documentacao')
 
     class Meta:
