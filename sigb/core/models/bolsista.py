@@ -17,8 +17,8 @@ class Bolsista(models.Model):
     cep = models.CharField(max_length=8)
     logradouro = models.CharField(max_length=255)
     numero = models.IntegerField()
-    cidade = models.CharField(max_length=255)
     uf = models.CharField(max_length=2)
+    municipio = models.CharField(max_length=255)
     documentacao = models.FileField(null=True, blank=True, upload_to='bolsista_documentacao')
 
     class Meta:

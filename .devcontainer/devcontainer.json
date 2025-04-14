@@ -1,0 +1,20 @@
+{
+    "name": "SIGB",
+    "dockerComposeFile": "../compose.yml",
+    "service": "web",
+    "workspaceFolder": "/app/sigb",
+    "shutdownAction": "stopCompose",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.vscode-pylance",
+                "ms-python.python",
+                "ms-python.debugpy"
+            ],
+            "settings": {
+                "python.terminal.activateEnvInCurrentTerminal": true,
+                "python.defaultInterpreterPath": "/app/.venv/bin/python"
+            }
+        }
+    }
+}

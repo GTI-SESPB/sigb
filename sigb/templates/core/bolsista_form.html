@@ -6,4 +6,40 @@
   <hr>
   {% include 'form.html' %} 
 </div>
+<script>
+function mascaraCPF(e) {
+  let value, input = e.target;
+  value = input.value.replace(/\D/g, '');
+  if (value.length == 11) {
+    input.value = value.replace(/(\d{3})(\d{3})(\d{3})(\d)/, '$1.$2.$3-$4');
+  }
+}
+
+async function getEndereco(cep) {
+  const input_logradouro = document.getElementsByName('logradouro')[0];
+  const input_municipio = document.getElementsByName('municipio')[0];
+  const input_uf = document.getElementsByName('uf')[0];
+  let divCarregamento = document.getElementById('carregamento');
+  divCarregamento.classList.remove('d-none');
+  await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+    .then(response => response.json())
+    .then(async (response) => {
+      if (!response.erro) {
+        input_logradouro.value = response.logradouro;
+        input_uf.value = response.uf;
+        await getMunicipios(response.uf);
+        input_municipio.value = response.localidade;
+      }
+    })
+    .catch(error => console.log(error));
+  divCarregamento.classList.add('d-none');
+}
+
+async function mascaraCEP(e) {
+  let value, input = e.target;
+  value = input.value.replace(/\D/g, '');
+  input.value = value.replace(/(\d{5})(\d)/,'$1-$2');
+  if (value.length == 8) await getEndereco(value);
+}
+</script>
 {% endblock main %}
