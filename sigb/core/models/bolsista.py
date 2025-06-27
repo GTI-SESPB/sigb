@@ -1,12 +1,15 @@
 from django.db import models
 
+from .utils import TimestampMixin
+
 
 __all__ = [
     'Bolsista',
+    'AnexoBolsista'
 ]
 
 
-class Bolsista(models.Model):
+class Bolsista(TimestampMixin):
     nome = models.CharField(max_length=255)
     cpf = models.CharField(max_length=11, unique=True)
     dt_nascimento = models.DateField()
@@ -19,10 +22,20 @@ class Bolsista(models.Model):
     uf = models.CharField(max_length=2)
     logradouro = models.CharField(max_length=255)
     numero = models.IntegerField()
-    documentacao = models.FileField(null=True, blank=True, upload_to='bolsista_documentacao')
+    documentacao = models.FileField(upload_to='bolsista_documentacao')
 
     class Meta:
         ordering = ['nome', 'cpf']
 
     def __str__(self):
         return self.cpf
+
+
+class AnexoBolsista(models.Model):
+    bolsista = models.ForeignKey(Bolsista, on_delete=models.CASCADE)
+    arquivo = models.FileField(upload_to='bolsista_documentos')
+    anexo = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']

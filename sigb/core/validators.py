@@ -1,7 +1,10 @@
 from django.core.exceptions import ValidationError
 
+from .utils import apenas_digitos
+
 
 def cpf_validator(cpf):
+    cpf = apenas_digitos(cpf)
     for dv in (0, 1):
         soma = 0
         for char, multiplicador in zip(cpf[dv:], range(10, 1, -1)):

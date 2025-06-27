@@ -1,10 +1,6 @@
 from django.contrib import admin
 
-# from .models import Bolsista, Bolsa, Edital, BolsistaBolsa
-
+from .models.bolsista import Bolsista
 
 # Register your models here.
-# admin.site.register(Bolsista)
-# admin.site.register(Bolsa)
-# admin.site.register(Edital)
-# admin.site.register(BolsistaBolsa)
+admin.site.register(Bolsista)

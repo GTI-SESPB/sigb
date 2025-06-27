@@ -13,7 +13,7 @@ class DownloadView(View):
         field_names = [
             field.name 
             for field 
-            in cls.model._meta.fields
+            in cls.model._meta.fields # type: ignore
         ]
         yield writer.writerow(field_names)
 
@@ -23,7 +23,7 @@ class DownloadView(View):
             ])
 
     def get(self, _):
-        queryset = self.model.objects.all()
+        queryset = self.model.objects.all() # type: ignore
         buffer = self.Echo()
         writer = csv.writer(buffer)
         return StreamingHttpResponse(
